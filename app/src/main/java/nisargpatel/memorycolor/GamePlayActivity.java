@@ -1,13 +1,12 @@
 package nisargpatel.memorycolor;
 
+import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
-import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -20,7 +19,8 @@ public class GamePlayActivity extends ActionBarActivity {
     public static ImageView imgView;
     public static TextView info;
 
-    private RelativeLayout buttonLayout;
+    public static RelativeLayout buttonLayout;
+
     private DialogFragment dialogWinLoss;
 
     private MemoryColor memColor;
@@ -37,14 +37,13 @@ public class GamePlayActivity extends ActionBarActivity {
         actionBar.hide();
 
         buttonLayout = (RelativeLayout) findViewById(R.id.buttonLayout);
-
-        pressCount = 0;
-        round = 0;
-
         imgView = (ImageView) findViewById(R.id.imageView);
         info = (TextView) findViewById(R.id.textView);
 
         memColor = new MemoryColor(PlayerActivity.getDifficulty());
+
+        pressCount = 0;
+        round = 0;
 
         startGame();
     }
@@ -76,39 +75,28 @@ public class GamePlayActivity extends ActionBarActivity {
     }
 
     private void startGame() {
-        enableButtons();
         info.setText("Press any button to start!");
     }
 
     private void startNextRound() {
-        disableButtons();
-
         round++;
-
         if (round <= memColor.getDifficulty()) {
-
             String[] genColors = memColor.randomColorGenerator(round);
             memColor.setGenColors(genColors);
             displayColors(genColors);
-
         } else {
             winConditionMet(true, memColor.getScore());
         }
-
-        enableButtons();
     }
 
     private void midRound() {
-
         if (pressCount >= round) {
-            disableButtons(); //disable buttons after the press count has been reached
             if (!memColor.checkColors()) {
                 winConditionMet(false, memColor.getScore());
             } else {
                 endRound();
             }
         }
-
     }
 
     private void endRound() {
@@ -135,6 +123,24 @@ public class GamePlayActivity extends ActionBarActivity {
 
     }
 
+    public static void disableButtons() {
+
+        for (int i = 0; i < buttonLayout.getChildCount(); i++) {
+            View view = buttonLayout.getChildAt(i);
+            view.setEnabled(false);
+        }
+
+    }
+
+    public static void enableButtons() {
+
+        for (int i = 0; i < buttonLayout.getChildCount(); i++) {
+            View view = buttonLayout.getChildAt(i);
+            view.setEnabled(true);
+        }
+
+    }
+
     private void buttonPressEvent(String color) {
         if (round == 0) {
             startNextRound();
@@ -143,28 +149,6 @@ public class GamePlayActivity extends ActionBarActivity {
             memColor.addInputColor(color);
             midRound();
         }
-    }
-
-    private void disableButtons() {
-        //buttonLayout.setEnabled(false);
-        ((Button)findViewById(R.id.buttonRed)).setEnabled(false);
-        ((Button)findViewById(R.id.buttonOrange)).setEnabled(false);
-        ((Button)findViewById(R.id.buttonYellow)).setEnabled(false);
-        ((Button)findViewById(R.id.buttonGreen)).setEnabled(false);
-        ((Button)findViewById(R.id.buttonBlue)).setEnabled(false);
-        ((Button)findViewById(R.id.buttonPurple)).setEnabled(false);
-        ((Button)findViewById(R.id.buttonCyan)).setEnabled(false);
-    }
-
-    private void enableButtons() {
-        //buttonLayout.setEnabled(true);
-        ((Button)findViewById(R.id.buttonRed)).setEnabled(true);
-        ((Button)findViewById(R.id.buttonOrange)).setEnabled(true);
-        ((Button)findViewById(R.id.buttonYellow)).setEnabled(true);
-        ((Button)findViewById(R.id.buttonGreen)).setEnabled(true);
-        ((Button)findViewById(R.id.buttonBlue)).setEnabled(true);
-        ((Button)findViewById(R.id.buttonPurple)).setEnabled(true);
-        ((Button)findViewById(R.id.buttonCyan)).setEnabled(true);
     }
 
     public void buttonRed(View view) {

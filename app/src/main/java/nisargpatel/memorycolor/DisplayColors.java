@@ -5,13 +5,19 @@ public class DisplayColors implements Runnable{
     String[] color;
 
     DisplayColors(String[] inputColor) {
-        color = new String[inputColor.length];
-        for (int i = 0; i < inputColor.length; i++)
-            color[i] = inputColor[i];
+        color = inputColor.clone();
+        //System.arraycopy(inputColor, 0, color, 0, inputColor.length);
     }
 
     @Override
     public void run() {
+
+        GamePlayActivity.buttonLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                GamePlayActivity.disableButtons();
+            }
+        });
 
         int tempColor = 0;
 
@@ -40,7 +46,6 @@ public class DisplayColors implements Runnable{
             });
 
             switch (color[i]) {
-
                 case "green":
                     tempColor = R.drawable.corner_green;
                     break;
@@ -62,7 +67,6 @@ public class DisplayColors implements Runnable{
                 case "yellow":
                     tempColor = R.drawable.corner_yellow;
                     break;
-
             }
 
             final int finalTempColor = tempColor;
@@ -72,7 +76,6 @@ public class DisplayColors implements Runnable{
                 @Override
                 public void run() {
                     GamePlayActivity.imgView.setBackgroundResource(finalTempColor);
-                    //GamePlayActivity.info.setText(finalColorName);
                 }
             });
 
@@ -90,6 +93,14 @@ public class DisplayColors implements Runnable{
             public void run() {
                 GamePlayActivity.imgView.setBackgroundResource(R.drawable.corner_black);
                 GamePlayActivity.info.setText("Enter colors");
+            }
+        });
+
+
+        GamePlayActivity.buttonLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                GamePlayActivity.enableButtons();
             }
         });
 

@@ -1,11 +1,8 @@
 package nisargpatel.memorycolor;
 
-import java.util.Scanner;
-
 public class MemoryColor {
 
     private final String COLOR_SET[] = {"red", "orange", "yellow", "green", "blue", "purple", "cyan"};
-    private final int NUM_COLORS = 7;
 
     private int score;
     private int difficulty;
@@ -28,12 +25,11 @@ public class MemoryColor {
         return difficulty;
     }
 
-    private String tempColor = "";
-
     public String[] randomColorGenerator(int amount) {
         String[] outputColors = new String[amount];
 
         for (int i = 0; i < amount; i++) {
+            String tempColor;
             if (i > 0) {
                 do {
                     tempColor = COLOR_SET[(int) (Math.random() * 7)];
@@ -43,7 +39,6 @@ public class MemoryColor {
                 tempColor = COLOR_SET[(int) (Math.random() * 7)];
                 outputColors[i] = tempColor;
             }
-
         }
 
         return outputColors;
@@ -66,8 +61,8 @@ public class MemoryColor {
     }
 
     public void setGenColors(String[] inputGenColors) {
-        for (int i = 0; i < inputGenColors.length; i++) {
-            genColors += inputGenColors[i] + " ";
+        for (String inputGenColor : inputGenColors) {
+            genColors += inputGenColor + " ";
         }
     }
 

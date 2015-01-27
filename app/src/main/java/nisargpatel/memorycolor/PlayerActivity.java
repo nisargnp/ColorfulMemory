@@ -1,9 +1,8 @@
 package nisargpatel.memorycolor;
 
 import android.content.Intent;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,33 +13,30 @@ import android.widget.Spinner;
 
 public class PlayerActivity extends ActionBarActivity {
 
-    private ActionBar actionBar;
-
-    private Spinner mySpinner;
     private String[] difficultyModes = {"Select difficulty: ", "Easy", "Medium", "Hard", "Impossible"};
 
     private static int difficulty;
 
     Button buttonPlay;
+    Button buttonSettings;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player);
 
-        actionBar = getSupportActionBar();
-        actionBar.hide();
+        getSupportActionBar().hide();
 
-        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(this, R.layout.simple_spinner_layout, difficultyModes);
+        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(this, R.layout.simple_spinner_layout, difficultyModes);
 
-        mySpinner = (Spinner) findViewById(R.id.spinner);
+        Spinner mySpinner = (Spinner) findViewById(R.id.spinner);
         mySpinner.setAdapter(spinnerAdapter);
         mySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
                 //When the adapter is first created, the first option is "Select difficulty:", which is now changed to "Tutorial"
-                difficultyModes[0] = "Tutorial";
+                difficultyModes[0] = "Super Easy";
                 difficulty = (position + 1) * 2 + 1;
             }
 
@@ -59,8 +55,16 @@ public class PlayerActivity extends ActionBarActivity {
             }
         });
 
-    }
+        buttonSettings = (Button) findViewById(R.id.buttonSettings);
+        buttonSettings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent myIntent = new Intent(PlayerActivity.this, SettingsActivity.class);
+                startActivity(myIntent);
+            }
+        });
 
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -74,7 +78,7 @@ public class PlayerActivity extends ActionBarActivity {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+//        int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
 //        if (id == R.id.action_settings) {

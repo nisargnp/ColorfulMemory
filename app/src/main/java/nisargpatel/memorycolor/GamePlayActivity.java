@@ -1,8 +1,10 @@
 package nisargpatel.memorycolor;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.support.v4.app.DialogFragment;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -11,17 +13,17 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-
 public class GamePlayActivity extends ActionBarActivity {
 
-    private ActionBar actionBar;
+    SharedPreferences gameSettings;
+    private static final String SHARED_PREFERENCES_NAME = "Memory Color Shared Preferences";
+
+    Vibrator vibes;
 
     public static ImageView imgView;
     public static TextView info;
 
     public static RelativeLayout buttonLayout;
-
-    private DialogFragment dialogWinLoss;
 
     private MemoryColor memColor;
 
@@ -33,8 +35,11 @@ public class GamePlayActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_play);
 
-        actionBar = getSupportActionBar();
-        actionBar.hide();
+        getSupportActionBar().hide();
+
+        gameSettings = getSharedPreferences(SHARED_PREFERENCES_NAME, 0);
+
+        vibes = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 
         buttonLayout = (RelativeLayout) findViewById(R.id.buttonLayout);
         imgView = (ImageView) findViewById(R.id.imageView);
@@ -60,7 +65,7 @@ public class GamePlayActivity extends ActionBarActivity {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+//        int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
 //        if (id == R.id.action_settings) {
@@ -111,8 +116,7 @@ public class GamePlayActivity extends ActionBarActivity {
 
         info.setText("Game Over!");
 
-        dialogWinLoss = new WinLossFragment();
-
+        DialogFragment dialogWinLoss = new WinLossFragment();
         Bundle args = new Bundle();
 
         args.putInt("score", score);
@@ -142,10 +146,15 @@ public class GamePlayActivity extends ActionBarActivity {
     }
 
     private void buttonPressEvent(String color) {
+
+        if (gameSettings.getBoolean("vibration", true))
+            vibes.vibrate(30);
+
         if (round == 0) {
             startNextRound();
         } else {
             pressCount++;
+            info.setText("Enter colors: " + (round - pressCount));
             memColor.addInputColor(color);
             midRound();
         }

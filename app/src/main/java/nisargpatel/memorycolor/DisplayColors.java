@@ -6,7 +6,6 @@ public class DisplayColors implements Runnable{
 
     DisplayColors(String[] inputColor) {
         color = inputColor.clone();
-        //System.arraycopy(inputColor, 0, color, 0, inputColor.length);
     }
 
     @Override
@@ -82,17 +81,21 @@ public class DisplayColors implements Runnable{
 
             try {
                 Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            } catch (InterruptedException ignored) {}
 
         }
+
+        GamePlayActivity.info.post(new Runnable() {
+            @Override
+            public void run() {
+                GamePlayActivity.info.setText("Enter colors: " + GamePlayActivity.round);
+            }
+        });
 
         GamePlayActivity.imgView.post(new Runnable() {
             @Override
             public void run() {
                 GamePlayActivity.imgView.setBackgroundResource(R.drawable.corner_black);
-                GamePlayActivity.info.setText("Enter colors");
             }
         });
 

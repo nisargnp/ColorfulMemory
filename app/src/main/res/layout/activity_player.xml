@@ -24,12 +24,20 @@
         android:text="@string/play_button"
         android:id="@+id/buttonPlay"
         android:textSize="30sp"
+        android:background="@drawable/white"
+        android:layout_above="@+id/buttonSettings"
+        android:layout_marginLeft="90dp"
+        android:layout_marginBottom="60dp" />
 
+    <Button
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:text="@string/action_settings"
+        android:id="@+id/buttonSettings"
+        android:textSize="15sp"
+        android:background="@drawable/white"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginRight="88dp"
-        android:layout_marginBottom="100dp"
-        android:background="@drawable/white"/>
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="40dp" />
 
 </RelativeLayout>

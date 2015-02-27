@@ -2,6 +2,7 @@ package nisargpatel.memorycolor;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.v4.app.DialogFragment;
@@ -12,23 +13,30 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import java.util.ArrayList;
 
 public class GamePlayActivity extends ActionBarActivity {
 
-    SharedPreferences gameSettings;
-    private static final String SHARED_PREFERENCES_NAME = "Memory Color Shared Preferences";
-
-    Vibrator vibes;
-
-    public static ImageView imgView;
-    public static TextView info;
+    public static SharedPreferences gameSettings;
+    private static final String PREFS_NAME = "Memory Color Shared Preferences";
 
     public static RelativeLayout buttonLayout;
+    public static ImageView imgView;
+    public static TextView textInfo;
+
+    private TextView textLives;
+    private TextView textScore;
+
+    private Vibrator vibes;
+    public static ArrayList<MediaPlayer> mediaPlayerList;
 
     private MemoryColor memColor;
 
-    public static int pressCount;
-    public static int round;
+    private static int pressCount;
+    private static int round;
+    private static int lives;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,18 +45,31 @@ public class GamePlayActivity extends ActionBarActivity {
 
         getSupportActionBar().hide();
 
-        gameSettings = getSharedPreferences(SHARED_PREFERENCES_NAME, 0);
-
-        vibes = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        gameSettings = getSharedPreferences(PREFS_NAME, 0);
 
         buttonLayout = (RelativeLayout) findViewById(R.id.buttonLayout);
         imgView = (ImageView) findViewById(R.id.imageView);
-        info = (TextView) findViewById(R.id.textView);
+        textInfo = (TextView) findViewById(R.id.textView);
+
+        textLives = (TextView) findViewById(R.id.textLives);
+        textScore = (TextView) findViewById(R.id.textScore);
+
+        vibes = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        mediaPlayerList = new ArrayList<>();
+
+        mediaPlayerList.add(MediaPlayer.create(getApplicationContext(), R.raw.tone_do));
+        mediaPlayerList.add(MediaPlayer.create(getApplicationContext(), R.raw.tone_re));
+        mediaPlayerList.add(MediaPlayer.create(getApplicationContext(), R.raw.tone_mi));
+        mediaPlayerList.add(MediaPlayer.create(getApplicationContext(), R.raw.tone_fa));
+        mediaPlayerList.add(MediaPlayer.create(getApplicationContext(), R.raw.tone_so));
+        mediaPlayerList.add(MediaPlayer.create(getApplicationContext(), R.raw.tone_la));
+        mediaPlayerList.add(MediaPlayer.create(getApplicationContext(), R.raw.tone_ti));
 
         memColor = new MemoryColor(PlayerActivity.getDifficulty());
 
         pressCount = 0;
         round = 0;
+        lives = 0;
 
         startGame();
     }
@@ -56,7 +77,7 @@ public class GamePlayActivity extends ActionBarActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_game_play, menu);
+//        getMenuInflater().inflate(R.menu.menu_game_play, menu);
         return true;
     }
 
@@ -80,24 +101,24 @@ public class GamePlayActivity extends ActionBarActivity {
     }
 
     private void startGame() {
-        info.setText("Press any button to start!");
+        textInfo.setText("Press any button to start!");
     }
 
     private void startNextRound() {
         round++;
-        if (round <= memColor.getDifficulty()) {
-            String[] genColors = memColor.randomColorGenerator(round);
-            memColor.setGenColors(genColors);
-            displayColors(genColors);
-        } else {
-            winConditionMet(true, memColor.getScore());
-        }
+
+        addLives();
+
+        String[] genColors = memColor.randomColorGenerator(round);
+        memColor.setGenColors(genColors);
+        displayColors(genColors);
+
     }
 
     private void midRound() {
         if (pressCount >= round) {
             if (!memColor.checkColors()) {
-                winConditionMet(false, memColor.getScore());
+                checkLives(false);
             } else {
                 endRound();
             }
@@ -109,23 +130,70 @@ public class GamePlayActivity extends ActionBarActivity {
 
         pressCount = 0;
         memColor.clearColors();
-        startNextRound();
+
+        textLives.setText(String.valueOf(lives));
+        textScore.setText(String.valueOf(memColor.getScore()));
+
+        if (round < memColor.getDifficulty())
+            startNextRound();
+        else
+            checkLives(true);
     }
 
-    private void winConditionMet(boolean playerWon, int score) {
+    private boolean gotFirstLife = false;
+    private boolean gotSecondLife = false;
 
-        info.setText("Game Over!");
+    private void addLives() {
+        if (round == (memColor.getDifficulty() - 1) / 2 && !gotFirstLife) {
+            gotFirstLife = true;
+
+            lives++;
+            textLives.setText(String.valueOf(lives));
+            Toast.makeText(getApplicationContext(), "You're halfway there!" + "\n" + "Extra life added!", Toast.LENGTH_SHORT).show();
+        } else if (round == memColor.getDifficulty() - 1 && !gotSecondLife) {
+            gotSecondLife = true;
+
+            lives++;
+            textLives.setText(String.valueOf(lives));
+            Toast.makeText(getApplicationContext(), "You're almost done!" + "\n" + "Extra life added!", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void checkLives(boolean playerWon) {
+
+        if (playerWon){
+            playerWon(true);
+        } else {
+            if (lives-- > 0) {
+                round--;
+                endRound();
+            } else {
+                playerWon(false);
+            }
+        }
+
+    }
+
+    private void playerWon(boolean playerWon) {
+
+        textInfo.setText("Game Over!");
 
         DialogFragment dialogWinLoss = new WinLossFragment();
         Bundle args = new Bundle();
 
-        args.putInt("score", score);
+        args.putInt("score", memColor.getScore());
         args.putBoolean("playerWon", playerWon);
 
         dialogWinLoss.setArguments(args);
         dialogWinLoss.show(getSupportFragmentManager(), "win/loss");
 
     }
+
+
+    public static int getRound() {
+        return round;
+    }
+
 
     public static void disableButtons() {
 
@@ -145,7 +213,16 @@ public class GamePlayActivity extends ActionBarActivity {
 
     }
 
-    private void buttonPressEvent(String color) {
+    boolean firstButtonPress = true;
+
+    private void buttonPressEvent(String color, int index) {
+
+        if (gameSettings.getBoolean("sound", true)) {
+            if (firstButtonPress)
+                firstButtonPress = false;
+            else
+                mediaPlayerList.get(index).start();
+        }
 
         if (gameSettings.getBoolean("vibration", true))
             vibes.vibrate(30);
@@ -154,38 +231,39 @@ public class GamePlayActivity extends ActionBarActivity {
             startNextRound();
         } else {
             pressCount++;
-            info.setText("Enter colors: " + (round - pressCount));
+            textInfo.setText("Enter colors: " + (round - pressCount));
             memColor.addInputColor(color);
             midRound();
         }
     }
 
     public void buttonRed(View view) {
-        buttonPressEvent("red");
-    }
-
-    public void buttonGreen(View view) {
-        buttonPressEvent("green");
-    }
-
-    public void buttonYellow(View view) {
-        buttonPressEvent("yellow");
+        buttonPressEvent("red", 0);
     }
 
     public void buttonOrange(View view) {
-        buttonPressEvent("orange");
+        buttonPressEvent("orange", 1);
     }
 
-    public void buttonPurple(View view) {
-        buttonPressEvent("purple");
+    public void buttonYellow(View view) {
+        buttonPressEvent("yellow", 2);
     }
 
-    public void buttonCyan(View view) {
-        buttonPressEvent("cyan");
+    public void buttonGreen(View view) {
+        buttonPressEvent("green", 3);
     }
 
     public void buttonBlue(View view) {
-        buttonPressEvent("blue");
+        buttonPressEvent("blue", 4);
     }
+
+    public void buttonCyan(View view) {
+        buttonPressEvent("cyan", 5);
+    }
+
+    public void buttonPurple(View view) {
+        buttonPressEvent("purple", 6);
+    }
+
 
 }

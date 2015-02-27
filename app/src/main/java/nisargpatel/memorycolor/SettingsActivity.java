@@ -1,9 +1,8 @@
 package nisargpatel.memorycolor;
 
 import android.content.SharedPreferences;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.CompoundButton;
@@ -25,10 +24,11 @@ public class SettingsActivity extends ActionBarActivity {
         final SharedPreferences.Editor gameSettingsEditor = gameSettings.edit();
 
         ToggleButton toggleButtonVibration = (ToggleButton) findViewById(R.id.toggleButtonVibration);
+        ToggleButton toggleButtonSound = (ToggleButton) findViewById(R.id.toggleButtonSound);
 
+        //sets the toggleButtons to on/off depending SharedPreferences values
         toggleButtonVibration.setChecked(gameSettings.getBoolean("vibration", true));
-
-        Log.d("sharedPreferences", (String.valueOf(gameSettings.getBoolean("vibration", true))));
+        toggleButtonSound.setChecked(gameSettings.getBoolean("sound", true));
 
         toggleButtonVibration.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -37,6 +37,16 @@ public class SettingsActivity extends ActionBarActivity {
                 gameSettingsEditor.apply();
             }
         });
+
+        toggleButtonSound.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                gameSettingsEditor.putBoolean("sound", isChecked);
+                gameSettingsEditor.apply();
+            }
+        });
+
+
     }
 
     @Override

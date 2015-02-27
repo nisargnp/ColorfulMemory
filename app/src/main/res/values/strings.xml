@@ -10,5 +10,9 @@
     <string name="select_difficulty">Select Difficulty</string>
     <string name="title_activity_settings">SettingsActivity</string>
     <string name="setting_vibration">Vibration</string>
+    <string name="lives">Lives:</string>
+    <string name="score">Score:</string>
+    <string name="zero">0</string>
+    <string name="setting_sound">Sound</string>
 
 </resources>

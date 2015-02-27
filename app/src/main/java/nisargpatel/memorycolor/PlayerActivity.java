@@ -17,9 +17,6 @@ public class PlayerActivity extends ActionBarActivity {
 
     private static int difficulty;
 
-    Button buttonPlay;
-    Button buttonSettings;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,7 +43,7 @@ public class PlayerActivity extends ActionBarActivity {
             }
         });
 
-        buttonPlay = (Button) findViewById(R.id.buttonPlay);
+        Button buttonPlay = (Button) findViewById(R.id.buttonPlay);
         buttonPlay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -55,7 +52,7 @@ public class PlayerActivity extends ActionBarActivity {
             }
         });
 
-        buttonSettings = (Button) findViewById(R.id.buttonSettings);
+        Button buttonSettings = (Button) findViewById(R.id.buttonSettings);
         buttonSettings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -1,11 +1,13 @@
 package nisargpatel.memorycolor;
 
+import java.util.Arrays;
+
 public class DisplayColors implements Runnable{
 
-    String[] color;
+    String[] colors;
 
     DisplayColors(String[] inputColor) {
-        color = inputColor.clone();
+        colors = inputColor.clone();
     }
 
     @Override
@@ -18,15 +20,13 @@ public class DisplayColors implements Runnable{
             }
         });
 
-        int tempColor = 0;
+        for (int colorIndex = 0; colorIndex < colors.length; colorIndex++) {
 
-        for (int i = 0; i < color.length; i++) {
-
-            if (i == 0) {
-                GamePlayActivity.info.post(new Runnable() {
+            if (colorIndex == 0) {
+                GamePlayActivity.textInfo.post(new Runnable() {
                     @Override
                     public void run() {
-                        GamePlayActivity.info.setText("Starting new round...");
+                        GamePlayActivity.textInfo.setText("Starting new round...");
                     }
                 });
 
@@ -37,47 +37,51 @@ public class DisplayColors implements Runnable{
                 }
             }
 
-            GamePlayActivity.info.post(new Runnable() {
+            GamePlayActivity.textInfo.post(new Runnable() {
                 @Override
                 public void run() {
-                    GamePlayActivity.info.setText("");
+                    GamePlayActivity.textInfo.setText("");
                 }
             });
 
-            switch (color[i]) {
-                case "green":
-                    tempColor = R.drawable.corner_green;
-                    break;
-                case "blue":
-                    tempColor = R.drawable.corner_blue;
-                    break;
+            int tempId = 0;
+            switch (colors[colorIndex]) {
                 case "red":
-                    tempColor = R.drawable.corner_red;
+                    tempId = R.drawable.corner_red;
                     break;
                 case "orange":
-                    tempColor = R.drawable.corner_orange;
-                    break;
-                case "purple":
-                    tempColor = R.drawable.corner_purple;
-                    break;
-                case "cyan":
-                    tempColor = R.drawable.corner_cyan;
+                    tempId = R.drawable.corner_orange;
                     break;
                 case "yellow":
-                    tempColor = R.drawable.corner_yellow;
+                    tempId = R.drawable.corner_yellow;
+                    break;
+                case "green":
+                    tempId = R.drawable.corner_green;
+                    break;
+                case "blue":
+                    tempId = R.drawable.corner_blue;
+                    break;
+                case "cyan":
+                    tempId = R.drawable.corner_cyan;
+                    break;
+                case "purple":
+                    tempId = R.drawable.corner_purple;
                     break;
             }
 
-            final int finalTempColor = tempColor;
-            //final String finalColorName = color[i];
+            final int finalId = tempId;
 
             GamePlayActivity.imgView.post(new Runnable() {
                 @Override
                 public void run() {
-                    GamePlayActivity.imgView.setBackgroundResource(finalTempColor);
+                    GamePlayActivity.imgView.setBackgroundResource(finalId);
                 }
             });
 
+            if (GamePlayActivity.gameSettings.getBoolean("sound", true)) {
+                int toneIndex = Arrays.asList(MemoryColor.COLOR_SET).indexOf(colors[colorIndex]);
+                GamePlayActivity.mediaPlayerList.get(toneIndex).start();
+            }
 
             try {
                 Thread.sleep(1000);
@@ -85,10 +89,10 @@ public class DisplayColors implements Runnable{
 
         }
 
-        GamePlayActivity.info.post(new Runnable() {
+        GamePlayActivity.textInfo.post(new Runnable() {
             @Override
             public void run() {
-                GamePlayActivity.info.setText("Enter colors: " + GamePlayActivity.round);
+                GamePlayActivity.textInfo.setText("Enter colors: " + GamePlayActivity.getRound());
             }
         });
 

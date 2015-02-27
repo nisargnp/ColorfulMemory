@@ -2,7 +2,7 @@ package nisargpatel.memorycolor;
 
 public class MemoryColor {
 
-    private final String COLOR_SET[] = {"red", "orange", "yellow", "green", "blue", "purple", "cyan"};
+    public static final String COLOR_SET[] = {"red", "orange", "yellow", "green", "blue", "cyan", "purple"};
 
     private int score;
     private int difficulty;

@@ -53,7 +53,7 @@
             android:layout_alignBottom="@+id/buttonPurple"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_marginBottom="23dp"
+            android:layout_marginBottom="60dp"
             android:background="@drawable/corner_blue" />
 
         <Button
@@ -73,9 +73,9 @@
             android:text="@string/blank"
             android:id="@+id/buttonYellow"
             android:onClick="buttonYellow"
-            android:layout_above="@+id/buttonCyan"
-            android:layout_alignLeft="@+id/buttonPurple"
-            android:layout_alignStart="@+id/buttonPurple"
+            android:layout_above="@+id/buttonPurple"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="20dp"
             android:background="@drawable/corner_yellow"/>
 
         <Button
@@ -87,7 +87,7 @@
             android:layout_above="@+id/buttonBlue"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_marginBottom="51dp"
+            android:layout_marginBottom="20dp"
             android:background="@drawable/corner_orange" />
 
         <Button
@@ -108,10 +108,53 @@
             android:id="@+id/buttonRed"
             android:onClick="buttonRed"
             android:layout_above="@+id/buttonYellow"
-            android:layout_alignLeft="@+id/buttonYellow"
-            android:layout_alignStart="@+id/buttonYellow"
-            android:layout_marginBottom="24dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="20dp"
             android:background="@drawable/corner_red" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="@string/lives"
+            android:id="@+id/textView3"
+            android:textColor="#FFFF"
+            android:layout_alignParentBottom="true"
+            android:layout_alignLeft="@+id/buttonCyan"
+            android:layout_alignStart="@+id/buttonCyan" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="@string/score"
+            android:id="@+id/textView4"
+            android:textColor="#FFFF"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="@string/zero"
+            android:id="@+id/textScore"
+            android:textColor="#FFFF"
+            android:layout_alignParentBottom="true"
+            android:layout_alignRight="@+id/buttonBlue"
+            android:layout_alignEnd="@+id/buttonBlue" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="@string/zero"
+            android:id="@+id/textLives"
+            android:textColor="#FFFF"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
     </RelativeLayout>
 
 </RelativeLayout>

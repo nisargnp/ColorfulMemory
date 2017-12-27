@@ -15,12 +15,12 @@ How colorful is your memory?
 <img src="https://github.com/nisargnp/ColorfulMemory/blob/master/Screenshots/home.png" hspace="20">
 <br>
 
-**Game is starting:**
+**Game starting:**
 <br>
 <img src="https://github.com/nisargnp/ColorfulMemory/blob/master/Screenshots/start.png" hspace="20">
 <br>
 
-**Colors (and sounds) being displayed:**
+**Colors (and sounds) displayed:**
 <br>
 <img src="https://github.com/nisargnp/ColorfulMemory/blob/master/Screenshots/display.png" hspace="20">
 <br>
